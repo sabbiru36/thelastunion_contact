@@ -1,0 +1,74 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as SH
+import time
+
+# 1. Launch browser
+driver = webdriver.Chrome()
+driver.maximize_window()
+# 2. Navigate to url 'https://thelastunicorn.store/'
+driver.get('https://thelastunicorn.store/')
+
+# 3. Verify that home page is visible successfully
+expected_home_page_url = "https://thelastunicorn.store/"
+
+try:
+    actual_home_page_url = driver.current_url
+    assert expected_home_page_url == actual_home_page_url
+    print("Home page is visible successfully.")
+except AssertionError:
+    print("home page is not visible successfully")
+# 4. Click on 'Contact ' button
+try:
+    contract_button = WebDriverWait(driver, 10).until(
+        SH.presence_of_element_located((By.CSS_SELECTOR, "#shopify-section-sections--19033530499359__header > sticky-header > header > nav > ul > li:nth-child(3) > a > span"))).click()
+except:
+    print("Contract us Button locator changed")
+
+
+# 6. Enter name, phone, and comment
+try:
+    name = WebDriverWait(driver, 10).until(
+        SH.presence_of_element_located((By.CSS_SELECTOR, "#ContactForm-name")))
+    name.send_keys('Sabbir')
+except:
+    print("Name locator changed")
+
+try:
+    gmail = WebDriverWait(driver, 10).until(
+        SH.presence_of_element_located((By.CSS_SELECTOR, "#ContactForm-email")))
+    gmail.send_keys("Sabbir@gmail.com")
+except:
+    print("Email locator changed")
+
+try:
+    phone = WebDriverWait(driver, 10).until(
+        SH.presence_of_element_located((By.CSS_SELECTOR, "#ContactForm-phone")))
+    phone.send_keys("01533810594")
+except:
+    print("Phone locator changed")
+
+try:
+    message = WebDriverWait(driver, 10).until(SH.presence_of_element_located((By.CSS_SELECTOR, "#ContactForm-body")))
+    message.send_keys("Hi, I'm SABBIR from Bangladesh. If any one need automation selenium support please contact with me here is my email address'sabbiru361@gmail.com")
+except:
+    print("Message locator changed")
+
+send_data = WebDriverWait(driver, 10).until(SH.presence_of_element_located((By.CSS_SELECTOR, "#ContactForm > div.contact__button > button"))).click()
+time.sleep(10)
+
+#captcha_click = WebDriverWait(driver, 10).until(SH.presence_of_element_located((By.CSS_SELECTOR, "#recaptcha-anchor > div.recaptcha-checkbox-border"))).click()
+#time.sleep(10)
+
+submit_confirm = WebDriverWait(driver, 10).until(SH.presence_of_element_located((By.CSS_SELECTOR, "#MainContent > div > form > input.shopify-challenge__button.btn"))).click()
+
+expected_contact_submit_success_text = "Thanks for contacting us. We'll get back to you as soon as possible."
+try:
+    actual_contact_submit_success_element = WebDriverWait(driver, 10).until(SH.presence_of_element_located((By.CSS_SELECTOR, "#ContactForm > h2")))
+    actual_contact_submit_success_text = actual_contact_submit_success_element.text
+    assert actual_contact_submit_success_text == expected_contact_submit_success_text
+    print("Thanks for contacting us. We'll get back to you as soon as possible, message is visible")
+except :
+    print("Thanks for contacting us. We'll get back to you as soon as possible, message is 'NOT' visible")
+
